@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_teacher_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context="com.example.brave.curriculum.TeacherSearchActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/title">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:onClick="back"
+                android:src="@drawable/back_icon"
+                android:layout_marginLeft="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="教师课表"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:layout_weight="8"/>
+            <ImageView
+                android:layout_width="26px"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/border2"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="55dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="学    期："
+                    android:textSize="20dp" />
+
+                <Spinner
+                    android:id="@+id/semester"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="教    师："
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/et_teacher"
+                    android:layout_width="235dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:maxLength="20"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="课    程："
+                    android:textColor="@color/transparent"
+                    android:textSize="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <Spinner
+                    android:id="@+id/teacher_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </Spinner>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linear_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="验证码："
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/identify_code_t"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:maxLength="4"/>
+
+                <ImageView
+                    android:id="@+id/validateImg_teacher"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/validate"
+                    android:onClick="imageValidate" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/teacher_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:onClick="teacherSearchResult"
+                android:text="查询"
+                android:textSize="22dp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">查课</string>
+    <string name="semester">请选择学期</string>
+    <string name="title_activity_hide_keyboard">HideKeyboardActivity</string>
+</resources>
