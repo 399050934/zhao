@@ -1,0 +1,343 @@
+ <!doctype html>
+ <html lang="zh-CN">
+ <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <link rel="stylesheet" href="css/common.css">
+   <link rel="stylesheet" href="css/main.css">
+   <script type="text/javascript" src="js/jquery.min.js"></script>
+   <script type="text/javascript" src="js/colResizable-1.3.min.js"></script>
+   <script type="text/javascript" src="js/common.js"></script>
+   
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function validate_auto(){
+		var obj={type:"GET",url:"validate"};
+		$.ajax(obj).done(function(res){
+			$("#validate").attr("src", "/SearchCourse/validate" + '?' + new Date());
+		});
+	}
+	function validate(){
+		$("#validate").on("click",function(){
+			var obj={type:"GET",url:"validate"};
+			$.ajax(obj).done(function(res){
+				$("#validate").attr("src", "/SearchCourse/validate" + '?' + new Date());
+			});
+		});
+	}
+	function semester() {
+		$.ajax({
+			type :"post",
+			url : "/SearchCourse/semesterList",
+			cache : false,
+			async : false,
+			dataType : "json",
+			success : function(data, textStatus, jqXHR) {
+				$('#semesterList').empty();  
+		    	$('#semesterList').append("<option >--请选择学期信息--</option>");  
+		    	for(var i in data){  
+	            	 //alert(data.length);
+	                $('#semesterList').append("<option value='"+data[i]+"'>"+i+"</option>");  
+	            }  
+			}
+		});
+	}
+	function campus() {
+		$.ajax({
+			type : "post",
+			url : "/SearchCourse/campusList",
+			cache : false,
+			async : false,
+			dataType : "json",
+			success : function(data, textStatus, jqXHR) {
+				$('#campusList').empty();  
+		    	$('#campusList').append("<option >--请选择校区信息--</option>");  
+		    	for(var i in data){  
+	            	 //alert(data.length);
+	                $('#campusList').append("<option value='"+data[i]+"'>"+i+"</option>");  
+	            }  
+			}
+		});
+	}
+	
+	$(document).ready(function(){
+		$("#roomList").change(function(){
+			ifChange();
+        });
+		$('#campusList').change(function(){
+			building();
+		});
+		$('#buildingList').change(function(){
+			room();
+		});
+	});
+	
+	function search(){
+		$("#roomSearch").on("click",function(){
+			var semester = $('#semesterList option:selected').val();
+			var campus = $('#campusList option:selected').val();
+			var building = $('#buildingList option:selected').val();
+			var room = $('#roomList option:selected').val();
+			var code = $('#validate_t').val();
+			var formData = "Sel_XNXQ=" + semester + "&rad_gs=1&txt_yzm=" + code + "&Sel_XQ=" + campus + "&Sel_JXL=" + building + "&Sel_ROOM=" + room;
+			
+			var url1 = "query/"+semester+campus+building+room;
+			var url2 = "queryNetRoom/"+semester+campus+building+room+"/"+formData;
+			var search = {type:"POST",url:url1};
+			var searchNet = {type:"POST",url:url2};
+			$.ajax(search).done(function(res){
+				if(res == " "){
+					$.ajax(searchNet).done(function(res){
+						if(res == " "){
+							alert("验证码错误！");
+							validate_auto();
+						}else{
+							parseJson(res);
+						}
+					});
+				}else{
+					parseJson(res);
+				}
+			});
+		});
+	}
+	
+	function parseJson(res){
+		data = $.parseJSON(res); 
+		var classTable = data.classtable;
+		var info = data.info;
+		if(info == "myxgkcb"){
+			alert("没有课！");
+			for(var i = 0; i < 6; i++){
+				for(var j = 0; j < 7; j++){
+					$("#"+i+j).html(" ");
+				}
+			}
+		}else{
+			for(var i = 0; i < classTable.length; i++){
+				for(var j = 0; j < classTable[i].length; j++){
+					$("#"+i+j).html(classTable[i][j]);
+				}
+			}
+		}
+	}
+	
+	function building() {
+		var campus = $('#campusList').val();
+		$.ajax({
+			type : "post",
+			url : "/SearchCourse/buildingList/"+campus,
+			cache : false,
+			async : false,
+			dataType : "json",
+			success : function(data, textStatus, jqXHR) {
+				$('#buildingList').empty();  
+		    	$('#buildingList').append("<option >--请选择教学楼信息--</option>");  
+		    	for(var i in data){  
+	            	 //alert(data.length);
+	                $('#buildingList').append("<option value='"+data[i]+"'>"+i+"</option>");  
+	            }  
+			}
+		});
+	}
+	
+	function room() {
+		var building = $('#buildingList').val();
+		$.ajax({
+			type : "post",
+			url : "/SearchCourse/roomList/"+building,
+			cache : false,
+			async : false,
+			dataType : "json",
+			success : function(data, textStatus, jqXHR) {
+				$('#roomList').empty();  
+		    	$('#roomList').append("<option >--请选择教室信息--</option>");  
+		    	for(var i in data){  
+	            	 //alert(data.length);
+	                $('#roomList').append("<option value='"+data[i]+"'>"+i+"</option>");  
+	            }  
+			}
+		});
+	}
+	
+	function ifChange() {
+		var semester = $('#semesterList option:selected').val();
+		var campus = $('#campusList option:selected').val();
+		var building = $('#buildingList option:selected').val();
+		var room = $('#roomList option:selected').val();
+		var url = "query/"+semester+campus+building+room;
+		var search = {type:"POST",url:url};
+		$.ajax(search).done(function(res){
+			if(res != " "){
+				$('#validate_y').hide();
+				$('#validate_t').hide();
+				$('#validate').hide();
+			}else{
+				$('#validate_y').show();
+				$('#validate_t').show();
+				$('#validate').show();
+			}
+		});
+	}
+
+</script>
+   <title>教室课表</title>
+ </head>
+ <body onload="semester();campus();building();room();validate();validate_auto();search();parseJson();">
+ 	<div id="forms" class="mt10">
+    	<div class="box">
+        	<div class="box_border">
+            	<div class="box_center" style="text-align:center">
+              		<table class="form_table pt15 pb15" width="100%" border="0" cellpadding="0" cellspacing="0">
+                		<tr>
+                			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                			<td style="text-align:left">学期：</td>
+                			<td>
+                   				<div class="select_border"> 
+                       				<div class="select_containers "> 
+                       					<select id="semesterList">
+									
+										</select>
+                       				</div> 
+                   				</div> 
+                			</td>
+                			<td style="text-align:left">校区：</td>
+                			<td>
+                   				<div class="select_border"> 
+                       				<div class="select_containers "> 
+                       					<select id="campusList" >
+						
+										</select>
+                       				</div> 
+                   				</div> 
+                			</td>
+                			<td style="text-align:left">教学楼：</td>
+                			<td>
+                   				<div class="select_border"> 
+                       				<div class="select_containers "> 
+                       					<select id="buildingList" >
+						
+										</select> 
+                       				</div> 
+                   				</div> 
+                			</td>
+                		</tr>
+                		<tr>
+                			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                			<td style="text-align:left">教室：</td>
+                			<td>
+                   				<div class="select_border"> 
+                       				<div class="select_containers "> 
+                       					<select id="roomList">
+						
+										</select>
+                       				</div> 
+                   				</div> 
+                			</td>
+                			<td id="validate_y" style="text-align:left">验证码：</td>
+                			<td>
+                				<input id="validate_t" type="text" name="name" class="input-text lh30" size="6" />
+                			</td>
+                			<td>
+                				<img id="validate" src="/SearchCourse/validate" />
+                			</td>
+                			<td>
+                				<div id="button" class="mt10">
+     								<button id="roomSearch" type="button" name="button" class="btn btn82 btn_search">查询</button>   
+     							</div>
+                			</td>
+                			<td class="td_right"></td>
+                		</tr>
+               		</table>
+         		</div>
+   			</div>
+		</div>
+	</div>
+     
+     <div id="table" class="mt10">
+        <div class="box span10 oh" style="text-align:center">
+        	<div class="box_border">
+        		<div class="box_top"><b class="pl15">重庆工程学院课程表</b></div>
+            	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="list_table">
+            		<tr>
+                		<th width="9%">星期/节次</th>
+                		<th width="13%">周一</th>
+                   		<th width="13%">周二</th>
+                   		<th width="13%">周三</th>
+                   		<th width="13%">周四</th>
+                   		<th width="13%">周五</th>
+                   		<th width="13%">周六</th>
+                   		<th width="13%">周日</th>
+                	</tr>
+	                <tr class="tr">
+	                	<td class="td_center">1</td>
+	                   	<td id="00"></td>
+	                   	<td id="01"></td>
+	                  	<td id="02"></td>
+	                   	<td id="03"></td>
+	                   	<td id="04"></td>
+	                   	<td id="05"></td>
+	                   	<td id="06"></td>
+	                 </tr>
+	                 <tr class="tr"> 
+	                 	<td class="td_center">2</td>
+	                   	<td id="10"></td>
+	                   	<td id="11"></td>
+	                   	<td id="12"></td>
+	                   	<td id="13"></td>
+	                   	<td id="14"></td>
+	                   	<td id="15"></td>
+	                   	<td id="16"></td>
+	                 </tr>
+	                 <tr class="tr">
+	                 	<td class="td_center">3</td>
+	                   	<td id="20"></td>
+	                   	<td id="21"></td>
+	                   	<td id="22"></td>
+	                   	<td id="23"></td>
+	                   	<td id="24"></td>
+	                   	<td id="25"></td>
+	                   	<td id="26"></td>
+	                 </tr>
+	                 <tr class="tr">
+	                 	<td class="td_center">4</td>
+	                   	<td id="30"></td>
+	                   	<td id="31"></td>
+	                   	<td id="32"></td>
+	                   	<td id="33"></td>
+	                   	<td id="34"></td>
+	                   	<td id="35"></td>
+	                   	<td id="36"></td>
+	                 </tr>
+	                 <tr class="tr">
+	                 	<td class="td_center">5</td>
+	                   	<td id="40"></td>
+	                   	<td id="41"></td>
+	                   	<td id="42"></td>
+	                   	<td id="43"></td>
+	                   	<td id="44"></td>
+	                   	<td id="45"></td>
+	                   	<td id="46"></td>
+	                 </tr>
+	                 <tr class="tr">
+	                 	<td class="td_center">6</td>
+	                 	<td id="50"></td>
+	                   	<td id="51"></td>
+	                   	<td id="52"></td>
+	                   	<td id="53"></td>
+	                   	<td id="54"></td>
+	                   	<td id="55"></td>
+	                   	<td id="56"></td>
+	                 </tr>
+              	</table>
+            </div>
+        </div>
+     </div>
+ </body>
+ </html>

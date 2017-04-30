@@ -1,0 +1,105 @@
+@CHARSET "UTF-8";
+.container{
+	padding: 10px;
+}
+/*iframe*/
+/*box*/
+.box{}
+.box_border{border: 1px solid #d3dbde;}
+.box_top{height: 37px; line-height: 37px; background: url('../images/box_top.png') 0px 0px repeat-x;}
+.box_top_l, .box_top_r{height: 37px;line-height: 37px;}
+ 
+/*button*/
+.btn{
+	height: 35px;
+	line-height: 35px;
+	border-style: none;
+	cursor: pointer;
+	font-size: 14px/35px;
+	font-family: "Microsoft YaHei","微软雅黑","sans-serif" ;
+}
+.btn82{
+	width: 82px;
+	text-align: left;
+	padding-left: 35px;
+}
+.btn_search{
+	background:   url('../images/btn_search.gif') 0px -1px no-repeat;
+}
+.btn_search:hover{
+	background:   url('../images/btn_search_hover.gif') 0px 0px no-repeat;
+	color: #fff;
+}
+/*table*/
+.list_table{
+	width: 100%;
+	border-top: 1px solid #d3dbde;
+	border-right: 1px solid #d3dbde;
+}
+.list_table th{
+height: 37px;
+background: url('../images/box_top.png') 0px 0px repeat-x;
+line-height: 37px;
+border-left: 1px solid #d3dbde;
+}
+.list_table td{
+	border-bottom: 1px solid #d3dbde;
+    border-left: 1px solid #d3dbde;
+    padding: 5px;
+}
+.form_table td{
+	padding: 5px 5px;
+}
+.td_center{text-align: center;}
+.td_left{text-align: left;}
+.td_right{text-align: right;}
+.td_right, .td_center, .td_left{
+	width: 120px;
+    line-height: 21px;
+}
+/*for IE7,8表格拖动失效*/
+.grip {
+	width: 20px;
+	height: 30px;
+	margin-top: -3px;
+	margin-left: -5px;
+	position: relative;
+	z-index: 88;
+	cursor: e-resize;
+}
+/*form*/
+.textarea,.input-text{
+	border: 1px solid #bac7d2;
+	background: #f7fcfe;/* #f7fcfe #f3fafd*/
+	border-radius: 2px;
+	box-shadow: 2px 2px 2px #e7f1f7 inset;
+}
+.input-text{height: 28px;}
+.textarea{width: 380px;height: 90px;}
+/*下拉框美化*/
+.select{ 
+border:1px solid #bac7d2; 
+padding:4px 3px; 
+font-size:12px; 
+height:30px; 
+*margin:-1px; 
+border-radius: 2px;
+box-shadow: 2px 2px 2px  #e7f1f7 inset; 
+} 
+.select_border{ 
+height:29px; 
+*background:#fff; 
+background:#fff; 
+*border:1px solid #bac7d2; 
+*padding:4px; 
+*height:20px; 
+} 
+.select_containers{ 
+*border:0; 
+*position:relative; 
+*height:18px; 
+*overflow:hidden; 
+} 
+.select_border,.select_containers {
+	display: inline-block;
+}
